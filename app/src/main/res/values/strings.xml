@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">CPU Speed Test</string>
     <string name="action_settings">Settings</string>
-    <string name="default_web_client_id">517925368203-t71ovs80p7u9isolrhme3tenq95j182h.apps.googleusercontent.com</string>
     <string name="error_message">Oops, something went wrong</string>
+    <string name="auth_failed">Authentication failed</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="leader_board">View Device Leaderboard</string>
+    <string name="test_cpu">CPU Speed Test</string>
+    <string name="title_activity_cpu_speed_test">CpuSpeedTestActivity</string>
+    <string name="title_activity_leader_board">LeaderBoardActivity</string>
 </resources>

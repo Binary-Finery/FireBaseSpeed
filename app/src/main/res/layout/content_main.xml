@@ -13,8 +13,26 @@
     tools:showIn="@layout/activity_main">
 
     <com.google.android.gms.common.SignInButton
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/google_sign_in_button">
     </com.google.android.gms.common.SignInButton>
+
+    <Button
+        android:id="@+id/button_sign_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sign_out" />
+
+    <Button
+        android:id="@+id/button_leader_board"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/leader_board" />
+
+    <Button
+        android:id="@+id/button_test_cpu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/test_cpu" />
 </LinearLayout>

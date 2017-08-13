@@ -19,6 +19,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".CpuSpeedTestActivity"
+            android:label="@string/title_activity_cpu_speed_test"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".LeaderBoardActivity"
+            android:label="@string/title_activity_leader_board"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".UserNameActivity"></activity>
     </application>
 
 </manifest>
