@@ -6,6 +6,7 @@
     <string name="sign_out">Sign Out</string>
     <string name="leader_board">View Device Leaderboard</string>
     <string name="test_cpu">CPU Speed Test</string>
-    <string name="title_activity_cpu_speed_test">CpuSpeedTestActivity</string>
+    <string name="title_activity_cpu_speed_test">CPU Speed Test</string>
     <string name="title_activity_leader_board">LeaderBoardActivity</string>
+    <string name="alert_dialog_username">Username is the name that will appear on the global rankings board</string>
 </resources>

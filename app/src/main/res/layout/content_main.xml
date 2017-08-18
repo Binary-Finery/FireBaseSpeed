@@ -13,26 +13,66 @@
     tools:showIn="@layout/activity_main">
 
     <com.google.android.gms.common.SignInButton
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/google_sign_in_button">
+        android:id="@+id/google_sign_in_button"
+        app:buttonSize="wide"
+        app:colorScheme="dark">
     </com.google.android.gms.common.SignInButton>
 
-    <Button
+    <TextView
         android:id="@+id/button_sign_out"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:padding="8dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center_horizontal"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-thin"
+        android:textSize="16dp"
+        android:background="@drawable/text_view_background_drawable"
         android:text="@string/sign_out" />
 
-    <Button
+    <TextView
         android:id="@+id/button_leader_board"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="16dp"
+        android:layout_marginTop="16dp"
+        android:padding="8dp"
+        android:fontFamily="sans-serif-thin"
+        android:background="@drawable/text_view_background_drawable"
         android:text="@string/leader_board" />
 
-    <Button
+    <TextView
         android:id="@+id/button_test_cpu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="16dp"
+        android:layout_marginTop="16dp"
+        android:padding="8dp"
+        android:fontFamily="sans-serif-thin"
+        android:background="@drawable/text_view_background_drawable"
+        android:text="CPU Speed Test" />
+
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/test_cpu" />
+        android:layout_marginTop="42dp"
+        android:textStyle="italic"
+        android:id="@+id/tv_sign"
+        android:text="Signed in as:"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_view_signed_in"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/image_view_icon"
+        android:src="@mipmap/ic_launcher"/>
 </LinearLayout>

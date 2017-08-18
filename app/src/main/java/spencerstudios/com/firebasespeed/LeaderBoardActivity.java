@@ -28,7 +28,7 @@ public class LeaderBoardActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference myRef;
     private String userID;
-    private ArrayList<UserInformation> userInfo;
+    private ArrayList<Data> userInfo;
     private ListView leaderboardListView;
 
 
@@ -49,7 +49,7 @@ public class LeaderBoardActivity extends AppCompatActivity {
         FirebaseUser user = mAuth.getCurrentUser();
         userID = user.getUid();
 
-        user  = mAuth.getCurrentUser();
+        //user  = mAuth.getCurrentUser();
 
         userInfo = new ArrayList<>();
 
@@ -59,17 +59,18 @@ public class LeaderBoardActivity extends AppCompatActivity {
 
         leaderboardListView.setAdapter(leaderBoardAdapter);
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef.orderByChild("time").limitToLast(1000).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
 
                     String username = (String) childDataSnapshot.child("userName").getValue();
-                    String device = (String) childDataSnapshot.child("device").getValue();
+                    String make = (String) childDataSnapshot.child("make").getValue();
+                    String model = (String)childDataSnapshot.child("model").getValue();
                     long time = (long)childDataSnapshot.child("time").getValue();
 
-                    userInfo.add(new UserInformation(username, device, time));
+                    userInfo.add(new Data(username, make, model, time));
                 }
                 leaderBoardAdapter.notifyDataSetChanged();
             }
@@ -80,24 +81,6 @@ public class LeaderBoardActivity extends AppCompatActivity {
 
         });
 
-        DatabaseReference databaseReference = mFirebaseDatabase.getReference(userID).child("userName");
-
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    String foo = (dataSnapshot.getValue(String.class));
-                    Toast.makeText(LeaderBoardActivity.this, "Username: "+ foo, Toast.LENGTH_LONG).show();
-                }else{
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
     }
 }

@@ -3,14 +3,16 @@ package spencerstudios.com.firebasespeed;
 public class Data {
 
     public String userName;
-    public String device;
+    public String make;
+    public String model;
     public long time;
 
     public Data(){ /*empty constructor*/}
 
-    public Data(String userName, String device, long time){
+    public Data(String userName, String make, String model, long time){
         this.userName = userName;
-        this.device = device;
+        this.make = make;
+        this.model = model;
         this.time = time;
     }
 
@@ -22,12 +24,20 @@ public class Data {
         this.userName = userName;
     }
 
-    public String getDevice() {
-        return device;
+    public String getMake() {
+        return make;
     }
 
-    public void setDevice(String device) {
-        this.device = device;
+    public void setMake(String make) {
+        this.make = make;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
     }
 
     public long getTime() {

@@ -7,15 +7,16 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class LeaderBoardAdapter extends BaseAdapter {
 
-    private ArrayList<UserInformation> userData;
+    private ArrayList<Data> userData;
     private LayoutInflater layoutInflater;
 
-    public LeaderBoardAdapter(Context context, ArrayList<UserInformation> userData) {
+    public LeaderBoardAdapter(Context context, ArrayList<Data> userData) {
         this.userData = userData;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -42,13 +43,16 @@ public class LeaderBoardAdapter extends BaseAdapter {
 
         TextView tvRank = (TextView) convertView.findViewById(R.id.text_view_rank);
         TextView tvUser = (TextView) convertView.findViewById(R.id.text_view_username);
-        TextView tvDevice = (TextView) convertView.findViewById(R.id.text_view_device);
+        TextView tvMake = (TextView) convertView.findViewById(R.id.text_view_make);
+        TextView tvModel = (TextView) convertView.findViewById(R.id.text_view_model);
         TextView tvTime = (TextView) convertView.findViewById(R.id.text_view_time);
 
-        tvRank.setText(String.format(Locale.getDefault(), "#%d", position));
+        tvRank.setText(String.format(Locale.getDefault(), "%d", position + 1));
         tvUser.setText(userData.get(position).getUserName());
-        tvDevice.setText(userData.get(position).getDevice());
-        tvTime.setText(String.valueOf(userData.get(position).getTime()));
+        tvMake.setText(userData.get(position).getMake());
+        tvModel.setText(userData.get(position).getModel());
+        tvTime.setText(NumberFormat.getNumberInstance(Locale.getDefault())
+                .format(userData.get(position).getTime()).concat(" ms"));
 
         return convertView;
     }

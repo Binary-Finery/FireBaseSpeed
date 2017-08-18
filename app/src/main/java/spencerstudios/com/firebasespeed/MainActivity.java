@@ -1,12 +1,16 @@
 package spencerstudios.com.firebasespeed;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
@@ -16,19 +20,27 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.images.ImageManager;
+import com.google.android.gms.internal.kx;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserInfo;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private SignInButton signInButton;
-    Button signOut, leaderboard, cpuSpeedTest;
+    private TextView signOut, leaderboard, cpuSpeedTest, signedIn, signInLabel;
+    private ImageView launcherIcon;
     private FirebaseAuth mAuth;
+    private FirebaseUser firebaseUser;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private GoogleApiClient mGoogleApiClient;
     private final static int RC_SIGN_IN = 2;
@@ -46,17 +58,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mAuth = FirebaseAuth.getInstance();
 
         signInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
-        signOut = (Button)findViewById(R.id.button_sign_out);
-        leaderboard = (Button)findViewById(R.id.button_leader_board);
-        cpuSpeedTest = (Button)findViewById(R.id.button_test_cpu);
+        signOut = (TextView) findViewById(R.id.button_sign_out);
+        leaderboard = (TextView) findViewById(R.id.button_leader_board);
+        cpuSpeedTest = (TextView) findViewById(R.id.button_test_cpu);
+        signInLabel = (TextView)findViewById(R.id.tv_sign) ;
+        signedIn  = (TextView)findViewById(R.id.text_view_signed_in) ;
+        launcherIcon = (ImageView)findViewById(R.id.image_view_icon) ;
 
         signInButton.setOnClickListener(this);
         signOut.setOnClickListener(this);
         leaderboard.setOnClickListener(this);
         cpuSpeedTest.setOnClickListener(this);
+
+        mAuth = FirebaseAuth.getInstance();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -69,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null){
                     displayLoggedInScreen();
+                    firebaseUser = mAuth.getCurrentUser();
+                    signedIn.setText(firebaseUser.getEmail());
                 }else{
                     displayNotLoggedInScreen();
                 }
@@ -100,8 +118,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (result.isSuccess()) {
                 GoogleSignInAccount account = result.getSignInAccount();
                 fireBaseAuthWithGoogle(account);
+                //displayLoggedInScreen();
             } else {
                 Toast.makeText(MainActivity.this, getString(R.string.error_message), Toast.LENGTH_SHORT).show();
+                //displayNotLoggedInScreen();
             }
         }
     }
@@ -114,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
+
                         } else {
                             Toast.makeText(MainActivity.this, getString(R.string.auth_failed), Toast.LENGTH_SHORT).show();
                         }
@@ -133,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (v == signInButton){
             //sign in
+            loadingScreen();
             signIn();
         }
         if (v == signOut){
@@ -153,11 +174,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         signInButton.setVisibility(View.VISIBLE);
         leaderboard.setVisibility(View.GONE);
         signOut.setVisibility(View.GONE);
+        signedIn.setVisibility(View.GONE);
+        signInLabel.setVisibility(View.GONE);
+        launcherIcon.setVisibility(View.GONE);
     }
 
     private void displayLoggedInScreen(){
         signInButton.setVisibility(View.INVISIBLE);
         leaderboard.setVisibility(View.VISIBLE);
         signOut.setVisibility(View.VISIBLE);
+        signedIn.setVisibility(View.VISIBLE);
+        launcherIcon.setVisibility(View.GONE);
+        cpuSpeedTest.setVisibility(View.VISIBLE);
+        signInLabel.setVisibility(View.VISIBLE);
+        try {
+            signedIn.setText(firebaseUser.getEmail());
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void loadingScreen(){
+        signInButton.setVisibility(View.GONE);
+        leaderboard.setVisibility(View.GONE);
+        signOut.setVisibility(View.GONE);
+        cpuSpeedTest.setVisibility(View.GONE);
+        launcherIcon.setVisibility(View.VISIBLE);
     }
 }

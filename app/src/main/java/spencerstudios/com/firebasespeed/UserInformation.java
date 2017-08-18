@@ -14,7 +14,6 @@ public class UserInformation {
         this.time = time;
     }
 
-
     public String getUserName() {
         return userName;
     }
