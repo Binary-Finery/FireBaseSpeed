@@ -31,7 +31,7 @@ import java.util.Locale;
 public class CpuSpeedTestActivity extends AppCompatActivity {
 
 
-    private DatabaseReference databaseReference;
+    private DatabaseReference mDatabase;
 
     private FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -54,17 +54,16 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
 
         findViews();
 
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         userID = user != null ? user.getUid() : null;
 
-        FirebaseUser user = mAuth.getCurrentUser();
-        userID = user.getUid();
-
-
-
         make = Build.BRAND.toUpperCase();
-        model = Build.MODEL.toString();
+        model = Build.MODEL;
 
         tvMake.setText(make);
         tvModel.setText(model);
@@ -88,20 +87,6 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
             }
         });
 
-
-        //firebaseAuth = FirebaseAuth.getInstance();
-        //databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        //String un = "Binary Finery", dev = "MOTO G3";
-        //long t = 3456;
-        //Data data = new Data(un, dev, t);
-
-        //FirebaseUser user = firebaseAuth.getCurrentUser();
-        //databaseReference.child(user.getUid()).setValue(data);
-
-        //String email = "Logged in with '"+ user.getEmail()+"'";
-        //tvEmail.setText(email);
-
         DatabaseReference databaseReference = mFirebaseDatabase.getReference(userID).child("userName");
 
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -114,9 +99,9 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
                     hasUsername = false;
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(CpuSpeedTestActivity.this, getString(R.string.error_message),Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -133,7 +118,13 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
         popup.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                String str = et.getText().toString().trim();
+                if (str.length() > 0){
+                    username = str;
+                    commitTimeToDatabase();
+                }else{
+                    Toast.makeText(CpuSpeedTestActivity.this, "Oops, invalid username!",Toast.LENGTH_LONG).show();
+                }
             }
         });
         popup.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -190,9 +181,8 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
     }
 
     private void commitTimeToDatabase() {
-        Data data = new Data(username, make, model, diff);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        databaseReference.child(userID).setValue(data);
+        Data data = new Data("whoop", "man", "jeez", 1000000101010L);
+        FirebaseUser fbu = mAuth.getCurrentUser();
+        mDatabase.child(fbu.getUid()).setValue(data);
     }
-
 }

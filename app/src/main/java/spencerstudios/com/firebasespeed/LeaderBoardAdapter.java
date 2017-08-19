@@ -44,13 +44,11 @@ public class LeaderBoardAdapter extends BaseAdapter {
         TextView tvRank = (TextView) convertView.findViewById(R.id.text_view_rank);
         TextView tvUser = (TextView) convertView.findViewById(R.id.text_view_username);
         TextView tvMake = (TextView) convertView.findViewById(R.id.text_view_make);
-        TextView tvModel = (TextView) convertView.findViewById(R.id.text_view_model);
         TextView tvTime = (TextView) convertView.findViewById(R.id.text_view_time);
 
         tvRank.setText(String.format(Locale.getDefault(), "%d", position + 1));
         tvUser.setText(userData.get(position).getUserName());
-        tvMake.setText(userData.get(position).getMake());
-        tvModel.setText(userData.get(position).getModel());
+        tvMake.setText(userData.get(position).getMake()+" "+ userData.get(position).getModel());
         tvTime.setText(NumberFormat.getNumberInstance(Locale.getDefault())
                 .format(userData.get(position).getTime()).concat(" ms"));
 
