@@ -13,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +45,8 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
     private final int MAX = 200000000;
     private boolean hasUsername = true;
 
+    private Animation ltr, rtl, ft;
+
     FloatingActionButton fabPerform, fabUpload;
 
     @Override
@@ -54,6 +58,10 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
 
         findViews();
 
+        tvThis.setVisibility(View.INVISIBLE);
+        tvPerformed.setVisibility(View.INVISIBLE);
+        tvTime.setVisibility(View.INVISIBLE);
+
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -61,6 +69,10 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         userID = user != null ? user.getUid() : null;
+
+        ltr = AnimationUtils.loadAnimation(this, R.anim.left_to_right);
+        rtl = AnimationUtils.loadAnimation(this, R.anim.right_to_left);
+        ft = AnimationUtils.loadAnimation(this, R.anim.from_top);
 
         make = Build.BRAND.toUpperCase();
         model = Build.MODEL;
@@ -169,6 +181,14 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             progressDialog.dismiss();
             fabPerform.setClickable(true);
+            tvThis.startAnimation(ft);
+            tvTime.startAnimation(ltr);
+            tvPerformed.startAnimation(rtl);
+
+            tvThis.setVisibility(View.VISIBLE);
+            tvPerformed.setVisibility(View.VISIBLE);
+            tvTime.setVisibility(View.VISIBLE);
+
             tvTime.setText(result);
         }
 
