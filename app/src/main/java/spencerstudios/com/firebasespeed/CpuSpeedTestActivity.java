@@ -101,7 +101,7 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(CpuSpeedTestActivity.this, getString(R.string.error_message),Toast.LENGTH_SHORT).show();
+                //Toast.makeText(CpuSpeedTestActivity.this, getString(R.string.error_message),Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -181,8 +181,12 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
     }
 
     private void commitTimeToDatabase() {
-        Data data = new Data("whoop", "man", "jeez", 1000000101010L);
+        //Data data = new Data(username, make, model, diff);
         FirebaseUser fbu = mAuth.getCurrentUser();
-        mDatabase.child(fbu.getUid()).setValue(data);
+        mDatabase.child(fbu.getUid()).child("userName").setValue(username);
+        mDatabase.child(fbu.getUid()).child("make").setValue(make);
+        mDatabase.child(fbu.getUid()).child("model").setValue(model);
+        mDatabase.child(fbu.getUid()).child("time").setValue(diff);
+
     }
 }
