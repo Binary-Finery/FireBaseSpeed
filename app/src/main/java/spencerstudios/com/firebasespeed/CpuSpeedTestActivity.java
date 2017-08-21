@@ -167,14 +167,12 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
 
             pre = System.currentTimeMillis();
-            for (int i = 0; i < MAX; i++) {
-            }
+            for (int i = 0; i < MAX; i++) {}
             post = System.currentTimeMillis();
+
             diff = (post - pre);
 
-            return NumberFormat.getNumberInstance(Locale.getDefault())
-                    .format(diff)
-                    .concat("\nmilliseconds");
+            return NumberFormat.getNumberInstance(Locale.getDefault()).format(diff).concat("\nmilliseconds");
         }
 
         @Override
@@ -202,11 +200,19 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
 
     private void commitTimeToDatabase() {
         //Data data = new Data(username, make, model, diff);
+
         FirebaseUser fbu = mAuth.getCurrentUser();
-        mDatabase.child(fbu.getUid()).child("userName").setValue(username);
-        mDatabase.child(fbu.getUid()).child("make").setValue(make);
-        mDatabase.child(fbu.getUid()).child("model").setValue(model);
-        mDatabase.child(fbu.getUid()).child("time").setValue(diff);
+
+        if (hasUsername) {
+            mDatabase.child(fbu.getUid()).child("userName").setValue(username);
+            mDatabase.child(fbu.getUid()).child("make").setValue(make);
+            mDatabase.child(fbu.getUid()).child("model").setValue(model);
+            mDatabase.child(fbu.getUid()).child("time").setValue(diff);
+        }else {
+            Data d = new Data("Jeff", "Google", "Pixie", 234L);
+            mDatabase.child(fbu.getUid()).setValue(d);
+        }
+
 
     }
 }

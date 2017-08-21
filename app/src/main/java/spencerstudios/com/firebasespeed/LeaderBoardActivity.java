@@ -1,14 +1,9 @@
 package spencerstudios.com.firebasespeed;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,8 +19,6 @@ public class LeaderBoardActivity extends AppCompatActivity {
 
     private FirebaseDatabase mFirebaseDatabase;
     private FirebaseAuth mAuth;
-    private FirebaseUser user;
-    private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference myRef;
     private String userID;
     private ArrayList<Data> userInfo;
@@ -39,17 +32,13 @@ public class LeaderBoardActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        if (getSupportActionBar()!=null){
-            getSupportActionBar().hide();
-        }
+        if (getSupportActionBar()!=null){getSupportActionBar().hide();}
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference();
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         userID = user.getUid();
-
-        //user  = mAuth.getCurrentUser();
 
         userInfo = new ArrayList<>();
 
@@ -62,6 +51,8 @@ public class LeaderBoardActivity extends AppCompatActivity {
         myRef.orderByChild("time").limitToLast(1000).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+                userInfo.clear();
 
                 for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
 
@@ -78,9 +69,6 @@ public class LeaderBoardActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
-
         });
-
-
     }
 }

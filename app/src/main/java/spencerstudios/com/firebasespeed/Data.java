@@ -7,7 +7,7 @@ public class Data {
     public String model;
     public long time;
 
-    public Data(){ /*empty constructor*/}
+    public Data(){}
 
     public Data(String userName, String make, String model, long time){
         this.userName = userName;
