@@ -61,6 +61,7 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
         tvThis.setVisibility(View.INVISIBLE);
         tvPerformed.setVisibility(View.INVISIBLE);
         tvTime.setVisibility(View.INVISIBLE);
+        fabUpload.setVisibility(View.INVISIBLE);
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
@@ -84,6 +85,7 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 fabPerform.setClickable(false);
+                fabUpload.setVisibility(View.INVISIBLE);
                 new LongOperation().execute("");
             }
         });
@@ -91,9 +93,9 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
         fabUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (hasUsername){
+                if (hasUsername) {
                     commitTimeToDatabase();
-                }else{
+                } else {
                     promptNewUsername();
                 }
             }
@@ -111,6 +113,7 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
                     hasUsername = false;
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 //Toast.makeText(CpuSpeedTestActivity.this, getString(R.string.error_message),Toast.LENGTH_SHORT).show();
@@ -131,11 +134,11 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String str = et.getText().toString().trim();
-                if (str.length() > 0){
+                if (str.length() > 0) {
                     username = str;
                     commitTimeToDatabase();
-                }else{
-                    Toast.makeText(CpuSpeedTestActivity.this, "Oops, invalid username!",Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(CpuSpeedTestActivity.this, "Oops, invalid username!", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -167,7 +170,7 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
 
             pre = System.currentTimeMillis();
-            for (int i = 0; i < MAX; i++) {}
+            for (int i = 0; i < MAX; i++){/*...busy...*/}
             post = System.currentTimeMillis();
 
             diff = (post - pre);
@@ -179,6 +182,7 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             progressDialog.dismiss();
             fabPerform.setClickable(true);
+            fabUpload.setVisibility(View.VISIBLE);
             tvThis.startAnimation(ft);
             tvTime.startAnimation(ltr);
             tvPerformed.startAnimation(rtl);
@@ -199,7 +203,6 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
     }
 
     private void commitTimeToDatabase() {
-        //Data data = new Data(username, make, model, diff);
 
         FirebaseUser fbu = mAuth.getCurrentUser();
 
@@ -208,11 +211,9 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
             mDatabase.child(fbu.getUid()).child("make").setValue(make);
             mDatabase.child(fbu.getUid()).child("model").setValue(model);
             mDatabase.child(fbu.getUid()).child("time").setValue(diff);
-        }else {
-            Data d = new Data("Jeff", "Google", "Pixie", 234L);
-            mDatabase.child(fbu.getUid()).setValue(d);
+        } else {
+            Data userData = new Data(username, make, model, diff);
+            mDatabase.child(fbu.getUid()).setValue(userData);
         }
-
-
     }
 }

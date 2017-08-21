@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp"
     android:layout_width="match_parent"
@@ -9,9 +10,9 @@
         android:id="@+id/et_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:maxLength="20"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        android:fontFamily="monospace"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:singleLine="true"
         android:imeOptions="actionDone" />
@@ -19,6 +20,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:paddingStart="8dp"
+        android:paddingEnd="8dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/colorAccent"
         android:text="@string/alert_dialog_username" />
