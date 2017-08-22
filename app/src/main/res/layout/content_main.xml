@@ -12,26 +12,6 @@
     tools:context="spencerstudios.com.firebasespeed.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <com.google.android.gms.common.SignInButton
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/google_sign_in_button"
-        app:buttonSize="wide"
-        app:colorScheme="dark">
-    </com.google.android.gms.common.SignInButton>
-
-    <TextView
-        android:id="@+id/button_sign_out"
-        android:layout_width="match_parent"
-        android:padding="8dp"
-        android:layout_marginTop="16dp"
-        android:gravity="center_horizontal"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-thin"
-        android:textSize="16dp"
-        android:background="@drawable/text_view_background_drawable"
-        android:text="@string/sign_out" />
-
     <TextView
         android:id="@+id/button_leader_board"
         android:layout_width="match_parent"
@@ -56,6 +36,25 @@
         android:background="@drawable/text_view_background_drawable"
         android:text="CPU Speed Test" />
 
+    <com.google.android.gms.common.SignInButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:id="@+id/google_sign_in_button"
+        app:buttonSize="wide"
+        app:colorScheme="dark">
+    </com.google.android.gms.common.SignInButton>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center_horizontal"
+        android:id="@+id/text_view_sign_info"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"
+        android:text="@string/sign_in_info"/>
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -69,6 +68,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/text_view_signed_in"/>
+
+    <Button
+        android:id="@+id/button_sign_out"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="#fff"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:background="@color/textColor"
+        android:text="@string/sign_out" />
+
 
     <ImageView
         android:layout_width="wrap_content"

@@ -37,13 +37,15 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private SignInButton signInButton;
-    private TextView signOut, leaderboard, cpuSpeedTest, signedIn, signInLabel;
+    private Button signOut;
+    private TextView leaderboard, cpuSpeedTest, signedIn, signInLabel, signInInfo;
     private ImageView launcherIcon;
     private FirebaseAuth mAuth;
     private FirebaseUser firebaseUser;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private GoogleApiClient mGoogleApiClient;
     private final static int RC_SIGN_IN = 2;
+    private boolean isSignedIn = false;
 
     @Override
     protected void onStart() {
@@ -60,7 +62,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         signInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
-        signOut = (TextView) findViewById(R.id.button_sign_out);
+        signOut = (Button) findViewById(R.id.button_sign_out);
+        signInInfo = (TextView)findViewById(R.id.text_view_sign_info);
         leaderboard = (TextView) findViewById(R.id.button_leader_board);
         cpuSpeedTest = (TextView) findViewById(R.id.button_test_cpu);
         signInLabel = (TextView)findViewById(R.id.tv_sign) ;
@@ -87,8 +90,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     displayLoggedInScreen();
                     firebaseUser = mAuth.getCurrentUser();
                     signedIn.setText(firebaseUser.getEmail());
+                    isSignedIn = true;
                 }else{
                     displayNotLoggedInScreen();
+                    isSignedIn = false;
                 }
             }
         };
@@ -172,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void displayNotLoggedInScreen(){
         signInButton.setVisibility(View.VISIBLE);
+        signInInfo.setVisibility(View.VISIBLE);
         leaderboard.setVisibility(View.GONE);
         signOut.setVisibility(View.GONE);
         signedIn.setVisibility(View.GONE);
@@ -180,7 +186,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void displayLoggedInScreen(){
-        signInButton.setVisibility(View.INVISIBLE);
+        signInButton.setVisibility(View.GONE);
+        signInInfo.setVisibility(View.GONE);
         leaderboard.setVisibility(View.VISIBLE);
         signOut.setVisibility(View.VISIBLE);
         signedIn.setVisibility(View.VISIBLE);
@@ -199,6 +206,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         leaderboard.setVisibility(View.GONE);
         signOut.setVisibility(View.GONE);
         cpuSpeedTest.setVisibility(View.GONE);
+        signInInfo.setVisibility(View.GONE);
         launcherIcon.setVisibility(View.VISIBLE);
     }
 }

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,7 +48,11 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
 
     private Animation ltr, rtl, ft;
 
-    FloatingActionButton fabPerform, fabUpload;
+    private FloatingActionButton fabPerform, fabUpload;
+
+    private LinearLayout rootView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +67,8 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
         tvPerformed.setVisibility(View.INVISIBLE);
         tvTime.setVisibility(View.INVISIBLE);
         fabUpload.setVisibility(View.INVISIBLE);
+
+        rootView = (LinearLayout)findViewById(R.id.cpu_root_view) ;
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
@@ -215,5 +222,7 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
             Data userData = new Data(username, make, model, diff);
             mDatabase.child(fbu.getUid()).setValue(userData);
         }
+
+        Snackbar.make(rootView, "Time uploaded to Global Rankings", Snackbar.LENGTH_LONG).show();
     }
 }
