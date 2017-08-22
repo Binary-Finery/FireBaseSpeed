@@ -7,7 +7,7 @@
     <string name="leader_board">Global Rankings</string>
     <string name="test_cpu">Speed Test</string>
     <string name="title_activity_cpu_speed_test">CPU Speed Test</string>
-    <string name="title_activity_leader_board">LeaderBoardActivity</string>
+    <string name="title_activity_leader_board">Global Rankings</string>
     <string name="alert_dialog_username">Username is the name that will appear on the global rankings board</string>
     <string name="text_view_this">this</string>
     <string name="text_view_performed">performed 200 million operations in</string>

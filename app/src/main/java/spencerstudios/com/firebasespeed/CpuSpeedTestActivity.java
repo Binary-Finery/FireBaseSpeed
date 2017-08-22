@@ -55,27 +55,14 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        findViews();
-
-        tvThis.setVisibility(View.INVISIBLE);
-        tvPerformed.setVisibility(View.INVISIBLE);
-        tvTime.setVisibility(View.INVISIBLE);
-        fabUpload.setVisibility(View.INVISIBLE);
-
-        rootView = (LinearLayout)findViewById(R.id.cpu_root_view) ;
+        findViewsAndInitialiseAnims();
 
         FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
-
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
-        String userID = user != null ? user.getUid() : null;
 
-        ltr = AnimationUtils.loadAnimation(this, R.anim.left_to_right);
-        rtl = AnimationUtils.loadAnimation(this, R.anim.right_to_left);
-        ft = AnimationUtils.loadAnimation(this, R.anim.from_top);
-        fabUploadAnim = AnimationUtils.loadAnimation(this, R.anim.zoom);
+        String userID = user != null ? user.getUid() : null;
 
         make = Build.BRAND.toUpperCase();
         model = Build.MODEL;
@@ -106,7 +93,6 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
 
         assert userID != null;
         DatabaseReference databaseReference = mFirebaseDatabase.getReference(userID).child("userName");
-
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -117,7 +103,6 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
                     hasUsername = false;
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
@@ -156,16 +141,7 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
         d.show();
     }
 
-    private void findViews() {
 
-        tvThis = (TextView) findViewById(R.id.text_view_this);
-        tvMake = (TextView) findViewById(R.id.text_view_make);
-        tvModel = (TextView) findViewById(R.id.text_view_model);
-        tvPerformed = (TextView) findViewById(R.id.text_view_performed);
-        tvTime = (TextView) findViewById(R.id.text_view_time);
-        fabPerform = (FloatingActionButton) findViewById(R.id.fab_test);
-        fabUpload = (FloatingActionButton) findViewById(R.id.fab_upload_time);
-    }
 
     private class LongOperation extends AsyncTask<String, Void, String> {
 
@@ -176,16 +152,17 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
 
             long pre = System.currentTimeMillis();
             int MAX = 200000000;
-            for (int i = 0; i < MAX; i++){/*...busy...*/}
+            for (int i = 0; i < MAX; i++){}
             long post = System.currentTimeMillis();
 
-            opsDuration = (post - pre);
+            opsDuration = post - pre;
 
             return NumberFormat.getNumberInstance(Locale.getDefault()).format(opsDuration).concat("\nmilliseconds");
         }
 
         @Override
         protected void onPostExecute(String result) {
+
             progressDialog.dismiss();
             fabPerform.setClickable(true);
             fabUpload.setVisibility(View.VISIBLE);
@@ -223,5 +200,27 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
             mDatabase.child(fbu.getUid()).setValue(userData);
         }
         Snackbar.make(rootView, "Time uploaded to Global Rankings", Snackbar.LENGTH_LONG).show();
+    }
+
+    private void findViewsAndInitialiseAnims() {
+
+        rootView = (LinearLayout)findViewById(R.id.cpu_root_view) ;
+        tvThis = (TextView) findViewById(R.id.text_view_this);
+        tvMake = (TextView) findViewById(R.id.text_view_make);
+        tvModel = (TextView) findViewById(R.id.text_view_model);
+        tvPerformed = (TextView) findViewById(R.id.text_view_performed);
+        tvTime = (TextView) findViewById(R.id.text_view_time);
+        fabPerform = (FloatingActionButton) findViewById(R.id.fab_test);
+        fabUpload = (FloatingActionButton) findViewById(R.id.fab_upload_time);
+
+        tvThis.setVisibility(View.INVISIBLE);
+        tvPerformed.setVisibility(View.INVISIBLE);
+        tvTime.setVisibility(View.INVISIBLE);
+        fabUpload.setVisibility(View.INVISIBLE);
+
+        ltr = AnimationUtils.loadAnimation(this, R.anim.left_to_right);
+        rtl = AnimationUtils.loadAnimation(this, R.anim.right_to_left);
+        ft = AnimationUtils.loadAnimation(this, R.anim.from_top);
+        fabUploadAnim = AnimationUtils.loadAnimation(this, R.anim.zoom);
     }
 }

@@ -17,13 +17,7 @@ import java.util.ArrayList;
 
 public class LeaderBoardActivity extends AppCompatActivity {
 
-    private FirebaseDatabase mFirebaseDatabase;
-    private FirebaseAuth mAuth;
-    private DatabaseReference myRef;
-    private String userID;
     private ArrayList<Data> userInfo;
-    private ListView leaderboardListView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,17 +26,18 @@ public class LeaderBoardActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        if (getSupportActionBar()!=null){getSupportActionBar().hide();}
+        //if (getSupportActionBar()!=null){getSupportActionBar().hide();}
 
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        myRef = mFirebaseDatabase.getReference();
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = mFirebaseDatabase.getReference();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
-        userID = user.getUid();
+        assert user != null;
+        //String userID = user.getUid();
 
         userInfo = new ArrayList<>();
 
-        leaderboardListView = (ListView)findViewById(R.id.leader_board_list_view) ;
+        ListView leaderboardListView = (ListView) findViewById(R.id.leader_board_list_view);
 
         final LeaderBoardAdapter leaderBoardAdapter = new LeaderBoardAdapter(this, userInfo);
 
