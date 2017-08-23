@@ -12,4 +12,6 @@
     <string name="text_view_this">this</string>
     <string name="text_view_performed">performed 200 million operations in</string>
     <string name="sign_in_info"><u>Why would I need to sign in?</u></string>
+    <string name="about_dialog_text">By signing in with Google you will be able to view the Global Rankings leaderboard. You will also be able to upload your CPU speed test time to the leaderboard if you wish</string>
+    <string name="got_it">Okay, got it</string>
 </resources>

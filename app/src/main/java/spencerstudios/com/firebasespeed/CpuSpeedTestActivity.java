@@ -3,6 +3,7 @@ package spencerstudios.com.firebasespeed;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,8 +35,10 @@ import java.util.Locale;
 public class CpuSpeedTestActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabase;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference databaseReference;
     private FirebaseAuth mAuth;
-    private String username = "";
+    private String username = "", userID;
     private String make;
     private String model;
 
@@ -48,6 +51,8 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
 
     private Animation ltr, rtl, ft, fabUploadAnim;
 
+    private boolean isSignedIn = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,18 +62,24 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
 
         findViewsAndInitialiseAnims();
 
-        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
+        Intent i = getIntent();
+        isSignedIn = i.getBooleanExtra("signed_in", true);
 
-        String userID = user != null ? user.getUid() : null;
+        if(isSignedIn) {
+            mFirebaseDatabase = FirebaseDatabase.getInstance();
+            mDatabase = FirebaseDatabase.getInstance().getReference();
+            mAuth = FirebaseAuth.getInstance();
+            FirebaseUser user = mAuth.getCurrentUser();
+            userID = user != null ? user.getUid() : null;
+        }
 
         make = Build.BRAND.toUpperCase();
         model = Build.MODEL;
 
         tvMake.setText(make);
         tvModel.setText(model);
+
+        if (!isSignedIn) fabUpload.setVisibility(View.INVISIBLE);
 
         fabPerform.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,21 +102,23 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
             }
         });
 
-        assert userID != null;
-        DatabaseReference databaseReference = mFirebaseDatabase.getReference(userID).child("userName");
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    username = (dataSnapshot.getValue(String.class));
-                    hasUsername = true;
-                } else {
-                    hasUsername = false;
+        if (isSignedIn) {
+            assert userID != null;
+            databaseReference = mFirebaseDatabase.getReference(userID).child("userName");
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        username = (dataSnapshot.getValue(String.class));
+                        hasUsername = true;
+                    } else {
+                        hasUsername = false;
+                    }
                 }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            });
+        }
     }
 
     private void promptNewUsername() {
@@ -165,7 +178,7 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
 
             progressDialog.dismiss();
             fabPerform.setClickable(true);
-            fabUpload.setVisibility(View.VISIBLE);
+            if (isSignedIn) fabUpload.setVisibility(View.VISIBLE);
             tvThis.startAnimation(ft);
             tvTime.startAnimation(ltr);
             tvPerformed.startAnimation(rtl);

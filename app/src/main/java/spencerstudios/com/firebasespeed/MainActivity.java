@@ -1,10 +1,12 @@
 package spencerstudios.com.firebasespeed;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -63,17 +65,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         signInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
         signOut = (Button) findViewById(R.id.button_sign_out);
-        signInInfo = (TextView)findViewById(R.id.text_view_sign_info);
+        signInInfo = (TextView) findViewById(R.id.text_view_sign_info);
         leaderboard = (TextView) findViewById(R.id.button_leader_board);
         cpuSpeedTest = (TextView) findViewById(R.id.button_test_cpu);
-        signInLabel = (TextView)findViewById(R.id.tv_sign) ;
-        signedIn  = (TextView)findViewById(R.id.text_view_signed_in) ;
-        launcherIcon = (ImageView)findViewById(R.id.image_view_icon) ;
+        signInLabel = (TextView) findViewById(R.id.tv_sign);
+        signedIn = (TextView) findViewById(R.id.text_view_signed_in);
+        launcherIcon = (ImageView) findViewById(R.id.image_view_icon);
 
         signInButton.setOnClickListener(this);
         signOut.setOnClickListener(this);
         leaderboard.setOnClickListener(this);
         cpuSpeedTest.setOnClickListener(this);
+        signInInfo.setOnClickListener(this);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -86,12 +89,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() != null){
+                if (firebaseAuth.getCurrentUser() != null) {
                     displayLoggedInScreen();
                     firebaseUser = mAuth.getCurrentUser();
                     signedIn.setText(firebaseUser.getEmail());
                     isSignedIn = true;
-                }else{
+                } else {
                     displayNotLoggedInScreen();
                     isSignedIn = false;
                 }
@@ -148,34 +151,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         finish();
     }
-
 
     @Override
     public void onClick(View v) {
 
-        if (v == signInButton){
+        if (v == signInButton) {
             //sign in
             loadingScreen();
             signIn();
         }
-        if (v == signOut){
+        if (v == signInInfo) {
+            displaySignInfoDialog();
+        }
+        if (v == signOut) {
             //sign out
             FirebaseAuth.getInstance().signOut();
         }
-        if (v == leaderboard){
+        if (v == leaderboard) {
             //display leader board
             startActivity(new Intent(MainActivity.this, LeaderBoardActivity.class));
         }
-        if (v == cpuSpeedTest){
+        if (v == cpuSpeedTest) {
             //go to cpu test
-            startActivity(new Intent(MainActivity.this, CpuSpeedTestActivity.class));
+            Intent i = new Intent(MainActivity.this, CpuSpeedTestActivity.class);
+            i.putExtra("signed_in", isSignedIn);
+            startActivity(i);
         }
     }
 
-    private void displayNotLoggedInScreen(){
+    private void displaySignInfoDialog() {
+
+        AlertDialog alert = new AlertDialog.Builder(MainActivity.this).create();
+        alert.setMessage(getString(R.string.about_dialog_text));
+        alert.setButton(DialogInterface.BUTTON_POSITIVE, "Got it", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alert.show();
+    }
+
+    private void displayNotLoggedInScreen() {
         signInButton.setVisibility(View.VISIBLE);
         signInInfo.setVisibility(View.VISIBLE);
         leaderboard.setVisibility(View.GONE);
@@ -185,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         launcherIcon.setVisibility(View.GONE);
     }
 
-    private void displayLoggedInScreen(){
+    private void displayLoggedInScreen() {
         signInButton.setVisibility(View.GONE);
         signInInfo.setVisibility(View.GONE);
         leaderboard.setVisibility(View.VISIBLE);
@@ -196,12 +216,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         signInLabel.setVisibility(View.VISIBLE);
         try {
             signedIn.setText(firebaseUser.getEmail());
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
     }
 
-    private void loadingScreen(){
+    private void loadingScreen() {
         signInButton.setVisibility(View.GONE);
         leaderboard.setVisibility(View.GONE);
         signOut.setVisibility(View.GONE);
