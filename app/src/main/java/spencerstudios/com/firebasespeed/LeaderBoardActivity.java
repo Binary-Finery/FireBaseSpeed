@@ -43,7 +43,7 @@ public class LeaderBoardActivity extends AppCompatActivity {
 
         leaderboardListView.setAdapter(leaderBoardAdapter);
 
-        myRef.orderByChild("time").limitToLast(500).addValueEventListener(new ValueEventListener() {
+        myRef.orderByChild("time").limitToLast(100).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 

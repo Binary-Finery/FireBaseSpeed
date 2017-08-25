@@ -202,6 +202,8 @@ public class CpuSpeedTestActivity extends AppCompatActivity {
 
         FirebaseUser fbu = mAuth.getCurrentUser();
 
+        if (username.equals("")) username = "Anonymous";
+
         if (hasUsername) {
             assert fbu != null;
             mDatabase.child(fbu.getUid()).child("userName").setValue(username);

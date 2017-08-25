@@ -36,21 +36,38 @@ public class LeaderBoardAdapter extends BaseAdapter {
         return position;
     }
 
+    static class ViewHolder{
+        TextView tvRank;
+        TextView tvUser;
+        TextView tvMake;
+        TextView tvTime;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        convertView = layoutInflater.inflate(R.layout.leader_board_item, null);
+        ViewHolder holder;
 
-        TextView tvRank = (TextView) convertView.findViewById(R.id.text_view_rank);
-        TextView tvUser = (TextView) convertView.findViewById(R.id.text_view_username);
-        TextView tvMake = (TextView) convertView.findViewById(R.id.text_view_make);
-        TextView tvTime = (TextView) convertView.findViewById(R.id.text_view_time);
+        if (convertView == null) {
 
-        tvRank.setText(String.format(Locale.getDefault(), "%d", position + 1));
-        tvUser.setText(userData.get(position).getUserName());
-        tvMake.setText(userData.get(position).getMake()+" "+ userData.get(position).getModel());
-        tvTime.setText(NumberFormat.getNumberInstance(Locale.getDefault())
-                .format(userData.get(position).getTime()).concat(" ms"));
+            convertView = layoutInflater.inflate(R.layout.leader_board_item, null);
+            holder = new ViewHolder();
+
+            holder.tvRank = (TextView) convertView.findViewById(R.id.text_view_rank);
+            holder.tvUser = (TextView) convertView.findViewById(R.id.text_view_username);
+            holder.tvMake = (TextView) convertView.findViewById(R.id.text_view_make);
+            holder.tvTime = (TextView) convertView.findViewById(R.id.text_view_time);
+
+            convertView.setTag(holder);
+        }else{
+
+            holder = (ViewHolder) convertView.getTag();
+        }
+
+        holder.tvRank.setText(String.format(Locale.getDefault(), "%d", position + 1));
+        holder.tvUser.setText(userData.get(position).getUserName());
+        holder.tvMake.setText(userData.get(position).getMake()+" "+ userData.get(position).getModel());
+        holder.tvTime.setText(NumberFormat.getNumberInstance(Locale.getDefault()).format(userData.get(position).getTime()).concat(" ms"));
 
         return convertView;
     }
